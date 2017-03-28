@@ -49,19 +49,19 @@ with open('train.csv', 'r') as csvfile:
         else:
             trainingModel.addRow(addThis,int(row[1582]));
         model.addRow(addThis,int(row[1582]));
-        if(count > 150):
-            break;
         
-from sklearn import svm
+        
+from sklearn.naive_bayes import GaussianNB
 
-clf = svm.SVC()
-clf.fit(trainingModel.toListRow(), trainingModel.toListTarget())
-clf.predict(testModel.toListRow())
+gnb = GaussianNB()
+vracara = gnb.fit(trainingModel.toListRow(), trainingModel.toListTarget())
+y_pred = vracara.predict(testModel.toListRow())
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-#y_true = testModel.toListTarget();
-#print(accuracy_score(y_true, y_pred))
+y_true = testModel.toListTarget();
+#print(y_pred)
+print(accuracy_score(y_true, y_pred))
 
 
 
