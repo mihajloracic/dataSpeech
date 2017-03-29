@@ -41,7 +41,7 @@ with open('train.csv', 'r') as csvfile:
         if(count == 0):
             continue;
         addThis = []
-        testSelect = r.randint(1,200);
+        testSelect = r.randint(1,10);
         for rec in row[0:1582]:
             addThis.append(float(rec));
         if(testSelect == 3):
@@ -50,14 +50,14 @@ with open('train.csv', 'r') as csvfile:
         else:
             #print("Dodajem u trening set");
             trainingModel.addRow(addThis,int(row[1582]));
-        if(count > 666):
-            break;
+        
 print(len(trainingModel.toListTarget()))
 print(len(testModel.toListTarget()))
 from sklearn.naive_bayes import GaussianNB
 
 from sklearn import svm
-clf = svm.SVC()
+from sklearn.neural_network import MLPClassifier
+clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(6, 3), random_state=1)
 vracara = clf.fit(trainingModel.toListRow(), trainingModel.toListTarget())
 y_pred = vracara.predict(testModel.toListRow())
 import numpy as np
