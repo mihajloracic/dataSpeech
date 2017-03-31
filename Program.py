@@ -50,7 +50,7 @@ with open('train.csv', 'r') as csvfile:
         else:
             #print("Dodajem u trening set");
             trainingModel.addRow(addThis,int(row[1582]));
-        if(count > 500):
+        if(count > 10000):
             break;
 print(len(trainingModel.toListTarget()))
 print(len(testModel.toListTarget()))
@@ -58,13 +58,18 @@ from sklearn import preprocessing
 
 training_scaled = preprocessing.scale(trainingModel.toListTarget())
 test_scaled = preprocessing.scale(testModel.toListTarget())
-from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import LinearSVC
 
-from sklearn import svm
-from sklearn.neural_network import MLPClassifier
-clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(6, 3), random_state=1)
-vracara = clf.fit(training_scaled, trainingModel.toListTarget())
-y_pred = vracara.predict(test_scaled)
+
+
+clf = LinearSVC(penalty='l2', loss='squared_hinge',
+                dual=True, tol=0.000001,
+                C=1.0, multi_class='ovr',
+                fit_intercept=True, intercept_scaling=1,
+                class_weight=None, verbose=0,
+                random_state=None, max_iter=1000)
+vracara = clf.fit(trainingModel.toListRow(), trainingModel.toListTarget())
+y_pred = vracara.predict(testModel.toListRow())
 import numpy as np
 from sklearn.metrics import accuracy_score
 
